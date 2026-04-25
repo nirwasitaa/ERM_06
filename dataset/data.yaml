@@ -2,12 +2,12 @@ train: ../train/images
 val: ../valid/images
 test: ../test/images
 
-nc: 2
-names: ['besi_tidak_karat', 'karat']
+nc: 3
+names: ['Kertas', 'Organik', 'Plastik']
 
 roboflow:
-  workspace: maliks-workspace-qdy2r
-  project: rust-metal-datasets
-  version: 1
+  workspace: capstone-elkro
+  project: sampah-lebop
+  version: 6
   license: CC BY 4.0
-  url: https://universe.roboflow.com/maliks-workspace-qdy2r/rust-metal-datasets/dataset/1
+  url: https://universe.roboflow.com/capstone-elkro/sampah-lebop/dataset/6
