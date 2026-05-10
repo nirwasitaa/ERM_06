@@ -23,7 +23,7 @@ import time
 # ─── Config ──────────────────────────────────────────────────────────────────
 
 MODEL_PATH  = "runs/detect/trash_runs/trash_v25/weights/best.pt"
-CAMERA_ID   = 0
+CAMERA_ID   = "rtsp://admin:wildan168@192.168.1.4:8554/stream0"
 CONF_THRESH = 0.55
 
 THRESH_HIGH = 70
@@ -74,15 +74,16 @@ latest_frame = None
 def camera_loop():
     global cap, latest_frame
 
-    cap = cv2.VideoCapture(CAMERA_ID)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH,  1280)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+    cap = cv2.VideoCapture(CAMERA_ID, cv2.CAP_FFMPEG)
+    cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+    cap.set(cv2.CAP_PROP_FPS, 15)
 
     fps_t = time.time()
     fps_n = 0
 
     while state["running"]:
         ret, frame = cap.read()
+        frame = cv2.resize(frame, (640, 360))
         if not ret:
             break
 
