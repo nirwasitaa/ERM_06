@@ -2,12 +2,12 @@ train: ../train/images
 val: ../valid/images
 test: ../test/images
 
-nc: 3
-names: ['Kertas', 'Organik', 'Plastik']
+nc: 2
+names: ['Kertas', 'Plastik']
 
 roboflow:
   workspace: brandens-workspace-l7bav
   project: sampah-fulsk
-  version: 1
+  version: 5
   license: CC BY 4.0
-  url: https://universe.roboflow.com/brandens-workspace-l7bav/sampah-fulsk/dataset/1
+  url: https://universe.roboflow.com/brandens-workspace-l7bav/sampah-fulsk/dataset/5
