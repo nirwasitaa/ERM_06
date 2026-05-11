@@ -6,8 +6,8 @@ nc: 2
 names: ['Kertas', 'Plastik']
 
 roboflow:
-  workspace: brandens-workspace-l7bav
-  project: sampah-fulsk
-  version: 5
+  workspace: novells-workspace
+  project: sampah-fulsk-ail5f
+  version: 1
   license: CC BY 4.0
-  url: https://universe.roboflow.com/brandens-workspace-l7bav/sampah-fulsk/dataset/5
+  url: https://universe.roboflow.com/novells-workspace/sampah-fulsk-ail5f/dataset/1

@@ -1,8 +1,8 @@
 
-sampah - v5 2026-05-11 1:21am
+sampah - v1 2026-05-11 11:06pm
 ==============================
 
-This dataset was exported via roboflow.com on May 10, 2026 at 6:24 PM GMT
+This dataset was exported via roboflow.com on May 11, 2026 at 4:09 PM GMT
 
 Roboflow is an end-to-end computer vision platform that helps you
 * collaborate with your team on computer vision projects
@@ -17,15 +17,12 @@ visit https://github.com/roboflow/notebooks
 
 To find over 100k other datasets and pre-trained models, visit https://universe.roboflow.com
 
-The dataset includes 8770 images.
+The dataset includes 11317 images.
 Sampah are annotated in YOLOv8 format.
 
 The following pre-processing was applied to each image:
-* Auto-orientation of pixel data (with EXIF-orientation stripping)
-* Resize to 576x576 (Stretch)
 
 The following augmentation was applied to create 2 versions of each source image:
-* Equal probability of one of the following 90-degree rotations: none, clockwise, counter-clockwise, upside-down
-* Random shear of between -10° to +10° horizontally and -9° to +9° vertically
+* Random rotation of between -15 and +15 degrees
 
 
