@@ -22,12 +22,22 @@ import time
 
 # ─── Config ──────────────────────────────────────────────────────────────────
 
-MODEL_PATH  = "runs/detect/trash_runs/trash_v25/weights/best.pt"
-CAMERA_ID   = "rtsp://admin:wildan168@192.168.1.4:8554/stream0"
+CAMERA_ID   = 0
 CONF_THRESH = 0.55
 
 THRESH_HIGH = 70
 THRESH_MID  = 40
+
+# ─── Auto-detect model terbaru ───────────────────────────────────────────────
+
+def get_latest_model():
+    pts = glob.glob("runs/detect/trash_runs/**/weights/best.pt", recursive=True)
+    if not pts:
+        raise FileNotFoundError("Tidak ada model ditemukan di runs/detect/trash_runs/")
+    latest = max(pts, key=os.path.getmtime)
+    return latest.replace("\\", "/")
+
+MODEL_PATH = get_latest_model()
 
 # ─── Auto color per class ─────────────────────────────────────────────────────
 
@@ -74,18 +84,18 @@ latest_frame = None
 def camera_loop():
     global cap, latest_frame
 
-    cap = cv2.VideoCapture(CAMERA_ID, cv2.CAP_FFMPEG)
-    cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-    cap.set(cv2.CAP_PROP_FPS, 15)
+    cap = cv2.VideoCapture(CAMERA_ID)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH,  1280)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
     fps_t = time.time()
     fps_n = 0
 
     while state["running"]:
         ret, frame = cap.read()
-        frame = cv2.resize(frame, (640, 360))
-        if not ret:
-            break
+        if not ret or frame is None:  # ← cek dulu sebelum proses
+            time.sleep(0.1)
+            continue
 
         results = model(frame, conf=state["conf"], verbose=False)[0]
         dets    = []
@@ -106,21 +116,18 @@ def camera_loop():
                 "color": color,
             })
 
-            # Warna box sesuai confidence
             if conf_pct >= THRESH_HIGH:
-                box_color = hex_to_bgr("#E55A2B")   # merah
+                box_color = hex_to_bgr("#E55A2B")
             elif conf_pct >= THRESH_MID:
-                box_color = hex_to_bgr("#F5A623")   # kuning
+                box_color = hex_to_bgr("#F5A623")
             else:
-                box_color = hex_to_bgr("#4ECB8D")   # hijau
+                box_color = hex_to_bgr("#4ECB8D")
 
-            # Draw box
             overlay = frame.copy()
             cv2.rectangle(overlay, (x1,y1), (x2,y2), box_color, -1)
             cv2.addWeighted(overlay, 0.15, frame, 0.85, 0, frame)
             cv2.rectangle(frame, (x1,y1), (x2,y2), box_color, 2)
 
-            # Pill label
             label = f"{name} {conf_pct}%"
             fs = 0.55
             (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_DUPLEX, fs, 1)
@@ -130,7 +137,6 @@ def camera_loop():
             cv2.putText(frame, label, (x1+px, y1-py),
                         cv2.FONT_HERSHEY_DUPLEX, fs, (255,255,255), 1, cv2.LINE_AA)
 
-        # ── Status ──
         if not dets:
             state["status"] = "no_object"
         else:
