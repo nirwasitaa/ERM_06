@@ -22,7 +22,7 @@ import time
 
 # ─── Config ──────────────────────────────────────────────────────────────────
 
-CAMERA_ID   = 0
+CAMERA_ID   = CAMERA_ID = "rtsp://admin:erm06@10.10.152.71:8554/stream1"
 CONF_THRESH = 0.55
 
 THRESH_HIGH = 70
@@ -84,7 +84,8 @@ latest_frame = None
 def camera_loop():
     global cap, latest_frame
 
-    cap = cv2.VideoCapture(CAMERA_ID)
+    cap = cv2.VideoCapture(CAMERA_ID, cv2.CAP_FFMPEG)
+    cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH,  1280)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
@@ -93,6 +94,9 @@ def camera_loop():
 
     while state["running"]:
         ret, frame = cap.read()
+        for _ in range(2):
+            cap.grab()
+        frame = cv2.resize(frame, (640, 360))
         if not ret or frame is None:  # ← cek dulu sebelum proses
             time.sleep(0.1)
             continue
