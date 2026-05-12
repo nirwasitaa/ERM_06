@@ -8,6 +8,6 @@ names: ['Kertas', 'Plastik']
 roboflow:
   workspace: novells-workspace
   project: sampah-fulsk-ail5f
-  version: 1
+  version: 2
   license: CC BY 4.0
-  url: https://universe.roboflow.com/novells-workspace/sampah-fulsk-ail5f/dataset/1
+  url: https://universe.roboflow.com/novells-workspace/sampah-fulsk-ail5f/dataset/2
